@@ -12,15 +12,16 @@
     <EditText
         android:layout_width="250dp"
         android:layout_height="30dp"
-        android:id="@+id/edit_name"
+        android:id="@+id/summonerSearchEdit"
         android:background="@drawable/back"
         android:hint="Enter Summoner Name"
-        android:inputType="textNoSuggestions"
+        android:inputType="text"
         android:ellipsize="start"
         android:drawableLeft="@drawable/search"
         android:drawablePadding="5dp"
         android:paddingLeft="5dp"
         android:layout_marginTop="184dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:imeOptions="actionDone"/>
 </RelativeLayout>
