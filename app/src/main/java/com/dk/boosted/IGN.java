@@ -136,7 +136,7 @@ public class IGN extends AppCompatActivity {
                     state = States.findingPlayers;
                     //find summoner current game data
                     new JsonTask().execute("https://na.api.pvp.net/observer-mode/rest/consumer/getSpectatorGameInfo/NA1/" +
-                            id + "?api_key=APIKEY");
+                            id + "?api_key=RGAPI-0F72C736-8550-4761-923E-4D68D08508D8");
                 //finds current game data to get each players data
                 } else if (state == States.findingPlayers) {
                     JSONObject response = new JSONObject(result);
@@ -149,7 +149,7 @@ public class IGN extends AppCompatActivity {
                     state = States.findingFull;
 //                    find first champion image
                     new JsonTask().execute("https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/" +
-                            championIDs[champCounter] + "?champData=image&api_key=APIKEY");
+                            championIDs[champCounter] + "?champData=image&api_key=RGAPI-0F72C736-8550-4761-923E-4D68D08508D8");
 //                    champCounter++;
                 } else if (state == States.findingFull) {
                     JSONObject response= new JSONObject(result);
@@ -161,10 +161,12 @@ public class IGN extends AppCompatActivity {
                     if (champCounter < 10) {
                         //find images for rest of the champions
                         new JsonTask().execute("https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/" +
-                                championIDs[champCounter] + "?champData=image&api_key=APIKEY");
+                                championIDs[champCounter] + "?champData=image&api_key=RGAPI-0F72C736-8550-4761-923E-4D68D08508D8");
 //                        champCounter++;
                     } else {
+                        champCounter = 0;
                         intent.putExtra("champFulls", champFulls);
+                        pd.dismiss();
                         startActivity(intent);
                     }
                 }
@@ -174,6 +176,7 @@ public class IGN extends AppCompatActivity {
                 e.printStackTrace();
                 //Alert Dialog for when invalid summoner name is entered
                 if (state == States.findingSummoner) {
+                    pd.dismiss();
                     new AlertDialog.Builder(IGN.this)
                             .setTitle("Summoner Name Not Found")
                             .setMessage("Please enter a valid summoner who is currently in a game.")
@@ -185,6 +188,7 @@ public class IGN extends AppCompatActivity {
                             .show();
                 //Alert Dialog for when summoner is not in a game
                 } else if (state == States.findingPlayers) {
+                    pd.dismiss();
                     state = States.findingSummoner;
                     new AlertDialog.Builder(IGN.this)
                             .setTitle("Summoner Game Not Found")
@@ -208,7 +212,7 @@ public class IGN extends AppCompatActivity {
         //search box for finding a summoner
         final EditText summonerSearchEdit = (EditText) findViewById(R.id.summonerSearchEdit);
         //find current patch
-        new JsonTask().execute("https://global.api.pvp.net/api/lol/static-data/na/v1.2/versions?api_key=APIKEY");
+        new JsonTask().execute("https://global.api.pvp.net/api/lol/static-data/na/v1.2/versions?api_key=RGAPI-0F72C736-8550-4761-923E-4D68D08508D8");
         //Action for when summoner name is entered
         summonerSearchEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -220,7 +224,7 @@ public class IGN extends AppCompatActivity {
                     pd.setCancelable(false);
                     pd.show();
                     new JsonTask().execute("https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/" +
-                        summonerSearchEdit.getText() + "?api_key=APIKEY");
+                        summonerSearchEdit.getText() + "?api_key=RGAPI-0F72C736-8550-4761-923E-4D68D08508D8");
 //                    intent.putExtra("SummonerName", summonerSearchEdit.getText());
                     return true;
                 }
