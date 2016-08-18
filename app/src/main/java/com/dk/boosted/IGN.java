@@ -33,7 +33,8 @@ import java.net.URL;
 public class IGN extends AppCompatActivity {
     ProgressDialog pd;
     public enum States {
-        findingSummoner, findingPatch, findingPlayers, findingFull
+        findingSummoner, findingPatch, findingPlayers, findingFull,
+        gettingFull
     }
     States state;
     String patch;
@@ -76,13 +77,13 @@ public class IGN extends AppCompatActivity {
                     buffer.append(line+"\n");
                 }
                 //might not need
-                if (state == States.findingFull) {
-                    JSONObject response= new JSONObject(buffer.toString());
-                    JSONObject image = response.getJSONObject("image");
-                    String full  = image.getString("full");
-                    Log.d("FULL", full);
-//                    champCounter++;
-                }
+//                if (state == States.findingFull) {
+//                    JSONObject response= new JSONObject(buffer.toString());
+//                    JSONObject image = response.getJSONObject("image");
+//                    String full  = image.getString("full");
+//                    Log.d("FULL", full);
+////                    champCounter++;
+//                }
                 return buffer.toString();
 
 
@@ -90,9 +91,11 @@ public class IGN extends AppCompatActivity {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } finally {
+            }
+//            catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+            finally {
                 if (connection != null) {
                     connection.disconnect();
                 }
@@ -137,35 +140,28 @@ public class IGN extends AppCompatActivity {
                 } else if (state == States.findingPlayers) {
                     JSONObject response = new JSONObject(result);
                     participantsInfo = response.getJSONArray("participants");
-//                    if (champCounter <  10) {
                     for (int i = 0; i < participantsInfo.length(); i++) {
                         JSONObject participantInfo = participantsInfo.getJSONObject(i);
                         championIDs[i] = participantInfo.getString("championId");
-//                        state = States.findingPlayers;
                         Log.d("CHAMPION ID", championIDs[i]);
-//                        champCounter++;
-                        //this tries to get image
-//                        new JsonTask().execute("https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/" +
-//                                    championId + "?champData=image&api_key=RGAPI-FE39B70F-DD1C-43F2-B851-AC81E7F95619");
-//                        id = participantInfo.getString("summonerId");
-//                        Log.d("champcounter", champCounter + "");
                     }
-//                    Log.d("WithID", response.getJSONArray("participants").toString());
-//                    state = States.findingSummoner;
-//                    } else {
-//                        state = States.findingFull;
-//                    }
-
+                    state = States.findingFull;
+                    //find first champion image
+                    new JsonTask().execute("https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/" +
+                            championIDs[champCounter] + "?champData=image&api_key=RGAPI-FE39B70F-DD1C-43F2-B851-AC81E7F95619");
+                    champCounter++;
                 } else if (state == States.findingFull) {
-//                    Log.d("FINDING FULL", result);
-//                    startActivity(intent);
-
-//                    championPics = result
+                    JSONObject response= new JSONObject(result);
+                    JSONObject image = response.getJSONObject("image");
+                    String full  = image.getString("full");
+                    Log.d("FULL1", full);
+                    if (champCounter < 10) {
+                        //find images for rest of the champions
+                        new JsonTask().execute("https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/" +
+                                championIDs[champCounter] + "?champData=image&api_key=RGAPI-FE39B70F-DD1C-43F2-B851-AC81E7F95619");
+                        champCounter++;
+                    }
                 }
-
-
-//                /observer-mode/rest/consumer/getSpectatorGameInfo/{platformId}/{summonerId}
-
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (NullPointerException e) {
