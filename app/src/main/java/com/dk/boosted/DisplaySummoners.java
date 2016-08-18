@@ -3,8 +3,11 @@ package com.dk.boosted;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import org.json.JSONObject;
+
+import java.util.Arrays;
 
 
 public class DisplaySummoners extends AppCompatActivity {
@@ -14,7 +17,8 @@ public class DisplaySummoners extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_summoners);
         Intent intent = getIntent();
-        String summonerName = intent.getStringExtra("SummonerName");
+        String[] champFulls = intent.getStringArrayExtra("champFulls");
+        Log.d("CHAMPFULLS", Arrays.toString(champFulls));
     }
 
 

@@ -39,6 +39,7 @@ public class IGN extends AppCompatActivity {
     States state;
     String patch;
     String[] championIDs = new String[10];
+    String[] champFulls = new String[10];
     JSONArray participantsInfo;
     int champCounter = 0;
 
@@ -46,14 +47,14 @@ public class IGN extends AppCompatActivity {
     //Credit: http://stackoverflow.com/questions/33229869/get-json-data-from-url-using-android
     private class JsonTask extends AsyncTask<String, String, String> {
 
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            pd = new ProgressDialog(IGN.this);
-            pd.setMessage("Please wait");
-            pd.setCancelable(false);
-            pd.show();
-        }
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//
+//            pd = new ProgressDialog(IGN.this);
+//            pd.setMessage("Please wait");
+//            pd.setCancelable(false);
+//            pd.show();
+//        }
 
         protected String doInBackground(String... params) {
 
@@ -113,9 +114,9 @@ public class IGN extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            if (pd.isShowing()){
-                pd.dismiss();
-            }
+//            if (pd.isShowing()){
+//                pd.dismiss();
+//            }
             try {
                 Intent intent = new Intent(IGN.this, DisplaySummoners.class);
                 String id;
@@ -135,7 +136,7 @@ public class IGN extends AppCompatActivity {
                     state = States.findingPlayers;
                     //find summoner current game data
                     new JsonTask().execute("https://na.api.pvp.net/observer-mode/rest/consumer/getSpectatorGameInfo/NA1/" +
-                            id + "?api_key=RGAPI-FE39B70F-DD1C-43F2-B851-AC81E7F95619");
+                            id + "?api_key=RGAPI-0F72C736-8550-4761-923E-4D68D08508D8");
                 //finds current game data to get each players data
                 } else if (state == States.findingPlayers) {
                     JSONObject response = new JSONObject(result);
@@ -146,20 +147,27 @@ public class IGN extends AppCompatActivity {
                         Log.d("CHAMPION ID", championIDs[i]);
                     }
                     state = States.findingFull;
-                    //find first champion image
+//                    find first champion image
                     new JsonTask().execute("https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/" +
-                            championIDs[champCounter] + "?champData=image&api_key=RGAPI-FE39B70F-DD1C-43F2-B851-AC81E7F95619");
-                    champCounter++;
+                            championIDs[champCounter] + "?champData=image&api_key=RGAPI-0F72C736-8550-4761-923E-4D68D08508D8");
+//                    champCounter++;
                 } else if (state == States.findingFull) {
                     JSONObject response= new JSONObject(result);
                     JSONObject image = response.getJSONObject("image");
                     String full  = image.getString("full");
-                    Log.d("FULL1", full);
+                    Log.d("FULL1", full + ": " + champCounter);
+                    champFulls[champCounter] = full;
+                    champCounter++;
                     if (champCounter < 10) {
                         //find images for rest of the champions
                         new JsonTask().execute("https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/" +
-                                championIDs[champCounter] + "?champData=image&api_key=RGAPI-FE39B70F-DD1C-43F2-B851-AC81E7F95619");
-                        champCounter++;
+                                championIDs[champCounter] + "?champData=image&api_key=RGAPI-0F72C736-8550-4761-923E-4D68D08508D8");
+//                        champCounter++;
+                    } else {
+                        champCounter = 0;
+                        intent.putExtra("champFulls", champFulls);
+                        pd.dismiss();
+                        startActivity(intent);
                     }
                 }
             } catch (JSONException e) {
@@ -168,6 +176,7 @@ public class IGN extends AppCompatActivity {
                 e.printStackTrace();
                 //Alert Dialog for when invalid summoner name is entered
                 if (state == States.findingSummoner) {
+                    pd.dismiss();
                     new AlertDialog.Builder(IGN.this)
                             .setTitle("Summoner Name Not Found")
                             .setMessage("Please enter a valid summoner who is currently in a game.")
@@ -179,6 +188,7 @@ public class IGN extends AppCompatActivity {
                             .show();
                 //Alert Dialog for when summoner is not in a game
                 } else if (state == States.findingPlayers) {
+                    pd.dismiss();
                     state = States.findingSummoner;
                     new AlertDialog.Builder(IGN.this)
                             .setTitle("Summoner Game Not Found")
@@ -202,15 +212,19 @@ public class IGN extends AppCompatActivity {
         //search box for finding a summoner
         final EditText summonerSearchEdit = (EditText) findViewById(R.id.summonerSearchEdit);
         //find current patch
-        new JsonTask().execute("https://global.api.pvp.net/api/lol/static-data/na/v1.2/versions?api_key=RGAPI-FE39B70F-DD1C-43F2-B851-AC81E7F95619");
+        new JsonTask().execute("https://global.api.pvp.net/api/lol/static-data/na/v1.2/versions?api_key=RGAPI-0F72C736-8550-4761-923E-4D68D08508D8");
         //Action for when summoner name is entered
         summonerSearchEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     state = States.findingSummoner;
+                    pd = new ProgressDialog(IGN.this);
+                    pd.setMessage("Please wait");
+                    pd.setCancelable(false);
+                    pd.show();
                     new JsonTask().execute("https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/" +
-                        summonerSearchEdit.getText() + "?api_key=RGAPI-FE39B70F-DD1C-43F2-B851-AC81E7F95619");
+                        summonerSearchEdit.getText() + "?api_key=RGAPI-0F72C736-8550-4761-923E-4D68D08508D8");
 //                    intent.putExtra("SummonerName", summonerSearchEdit.getText());
                     return true;
                 }
