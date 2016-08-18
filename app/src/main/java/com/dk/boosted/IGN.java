@@ -136,7 +136,7 @@ public class IGN extends AppCompatActivity {
                     state = States.findingPlayers;
                     //find summoner current game data
                     new JsonTask().execute("https://na.api.pvp.net/observer-mode/rest/consumer/getSpectatorGameInfo/NA1/" +
-                            id + "?api_key=RGAPI-0F72C736-8550-4761-923E-4D68D08508D8");
+                            id + "?api_key=RGAPI-4BA2AC26-F249-4BDC-AE5E-7BF6042EB508");
                 //finds current game data to get each players data
                 } else if (state == States.findingPlayers) {
                     JSONObject response = new JSONObject(result);
@@ -149,7 +149,7 @@ public class IGN extends AppCompatActivity {
                     state = States.findingFull;
 //                    find first champion image
                     new JsonTask().execute("https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/" +
-                            championIDs[champCounter] + "?champData=image&api_key=RGAPI-0F72C736-8550-4761-923E-4D68D08508D8");
+                            championIDs[champCounter] + "?champData=image&api_key=RGAPI-4BA2AC26-F249-4BDC-AE5E-7BF6042EB508");
 //                    champCounter++;
                 } else if (state == States.findingFull) {
                     JSONObject response= new JSONObject(result);
@@ -161,7 +161,7 @@ public class IGN extends AppCompatActivity {
                     if (champCounter < 10) {
                         //find images for rest of the champions
                         new JsonTask().execute("https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/" +
-                                championIDs[champCounter] + "?champData=image&api_key=RGAPI-0F72C736-8550-4761-923E-4D68D08508D8");
+                                championIDs[champCounter] + "?champData=image&api_key=RGAPI-4BA2AC26-F249-4BDC-AE5E-7BF6042EB508");
 //                        champCounter++;
                     } else {
                         champCounter = 0;
@@ -212,7 +212,7 @@ public class IGN extends AppCompatActivity {
         //search box for finding a summoner
         final EditText summonerSearchEdit = (EditText) findViewById(R.id.summonerSearchEdit);
         //find current patch
-        new JsonTask().execute("https://global.api.pvp.net/api/lol/static-data/na/v1.2/versions?api_key=RGAPI-0F72C736-8550-4761-923E-4D68D08508D8");
+        new JsonTask().execute("https://global.api.pvp.net/api/lol/static-data/na/v1.2/versions?api_key=RGAPI-4BA2AC26-F249-4BDC-AE5E-7BF6042EB508");
         //Action for when summoner name is entered
         summonerSearchEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -224,7 +224,7 @@ public class IGN extends AppCompatActivity {
                     pd.setCancelable(false);
                     pd.show();
                     new JsonTask().execute("https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/" +
-                        summonerSearchEdit.getText() + "?api_key=RGAPI-0F72C736-8550-4761-923E-4D68D08508D8");
+                        summonerSearchEdit.getText() + "?api_key=RGAPI-4BA2AC26-F249-4BDC-AE5E-7BF6042EB508");
 //                    intent.putExtra("SummonerName", summonerSearchEdit.getText());
                     return true;
                 }
