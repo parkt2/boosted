@@ -6,7 +6,7 @@
     <!--android:layout_height="fill_parent" >-->
 
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -14,15 +14,119 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
+        android:orientation="vertical"
         tools:context="com.dk.boosted.DisplaySummoners">
 
-    <TextView
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/gameMode"
+        android:id="@+id/summoner1"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-</RelativeLayout>
+        android:layout_alignParentStart="true"
+        android:minHeight="40dp"
+        android:minWidth="40dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/summoner2"
+        android:minHeight="40dp"
+        android:minWidth="40dp"
+        android:layout_below="@+id/summoner1"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="7dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/summoner3"
+        android:minHeight="40dp"
+        android:minWidth="40dp"
+        android:layout_below="@+id/summoner2"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="7dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/summoner4"
+        android:minHeight="40dp"
+        android:minWidth="40dp"
+        android:layout_below="@+id/summoner3"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="7dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/summoner5"
+        android:minHeight="40dp"
+        android:minWidth="40dp"
+        android:layout_below="@+id/summoner4"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="7dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/summoner6"
+        android:minHeight="40dp"
+        android:minWidth="40dp"
+        android:layout_below="@+id/summoner5"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/summoner7"
+        android:minHeight="40dp"
+        android:minWidth="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/summoner6"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="7dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/summoner8"
+        android:minHeight="40dp"
+        android:minWidth="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/summoner7"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="7dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/summoner9"
+        android:minHeight="40dp"
+        android:minWidth="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/summoner8"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="7dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/summoner10"
+        android:minHeight="40dp"
+        android:minWidth="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/summoner9"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="7dp"/>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Another Summoner"
+        android:id="@+id/button"
+        android:layout_gravity="right" />
+</LinearLayout>
 
 <!--</ScrollView>-->
