@@ -40,6 +40,8 @@ public class IGN extends AppCompatActivity {
     String patch;
     String[] championIDs = new String[10];
     String[] champFulls = new String[10];
+    String[] summNames = new String[10];
+    String[] summFulls = new String[10];
     JSONArray participantsInfo;
     int champCounter = 0;
 
@@ -144,7 +146,9 @@ public class IGN extends AppCompatActivity {
                     for (int i = 0; i < participantsInfo.length(); i++) {
                         JSONObject participantInfo = participantsInfo.getJSONObject(i);
                         championIDs[i] = participantInfo.getString("championId");
+                        summNames[i] = participantInfo.getString("summonerName");
                         Log.d("CHAMPION ID", championIDs[i]);
+                        Log.d("SUMMONER NAME", summNames[i]);
                     }
                     state = States.findingFull;
 //                    find first champion image
@@ -156,7 +160,9 @@ public class IGN extends AppCompatActivity {
                     JSONObject image = response.getJSONObject("image");
                     String full  = image.getString("full");
                     Log.d("FULL1", full + ": " + champCounter);
+
                     champFulls[champCounter] = full;
+                    summFulls[champCounter] = summNames[champCounter];
                     champCounter++;
                     if (champCounter < 10) {
                         //find images for rest of the champions
@@ -166,6 +172,7 @@ public class IGN extends AppCompatActivity {
                     } else {
                         champCounter = 0;
                         intent.putExtra("champFulls", champFulls);
+                        intent.putExtra("summFulls", summFulls);
                         pd.dismiss();
                         startActivity(intent);
                     }
