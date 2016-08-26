@@ -42,6 +42,7 @@ public class IGN extends AppCompatActivity {
     String[] champFulls = new String[10];
     String[] summNames = new String[10];
     String[] summFulls = new String[10];
+    String summonerNameForUrl;
     JSONArray participantsInfo;
     int champCounter = 0;
 
@@ -130,9 +131,11 @@ public class IGN extends AppCompatActivity {
                 //find the data for the summoner entered
                 } else if (state == States.findingSummoner) {
                     JSONObject response = new JSONObject(result);
+                    Log.d("LOL", response.toString());
                     EditText summonerSearchEdit = (EditText) findViewById(R.id.summonerSearchEdit);
+                    summonerNameForUrl = summonerNameForUrl.replace("%20", "");
                     //get summoner id to perform next JSON task
-                    id = response.getJSONObject(summonerSearchEdit.getText().toString()).getString("id");
+                    id = response.getJSONObject(summonerNameForUrl).getString("id");
                     Log.d("TEST", result);
                     Log.d("ID", id);
                     state = States.findingPlayers;
@@ -230,8 +233,9 @@ public class IGN extends AppCompatActivity {
                     pd.setMessage("Please wait");
                     pd.setCancelable(false);
                     pd.show();
+                    summonerNameForUrl = summonerSearchEdit.getText().toString().toLowerCase().replace(" ", "%20");
                     new JsonTask().execute("https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/" +
-                        summonerSearchEdit.getText() + "?api_key=RGAPI-4BA2AC26-F249-4BDC-AE5E-7BF6042EB508");
+                        summonerNameForUrl + "?api_key=RGAPI-4BA2AC26-F249-4BDC-AE5E-7BF6042EB508");
 //                    intent.putExtra("SummonerName", summonerSearchEdit.getText());
                     return true;
                 }
