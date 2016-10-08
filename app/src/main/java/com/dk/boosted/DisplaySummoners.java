@@ -27,8 +27,8 @@ public class DisplaySummoners extends AppCompatActivity {
         Intent intent = getIntent();
         String[] champFulls = intent.getStringArrayExtra("champFulls");
         String[] summFulls = intent.getStringArrayExtra("summFulls");
-        Log.d("CHAMPFULLS", Arrays.toString(champFulls));
-        Log.d("SUMMFULLS", Arrays.toString(summFulls));
+//        Log.d("CHAMPFULLS", Arrays.toString(champFulls));
+//        Log.d("SUMMFULLS", Arrays.toString(summFulls));
         new DownloadImageTask((ImageView) findViewById(R.id.summoner1))
                 .execute("http://ddragon.leagueoflegends.com/cdn/6.16.2/img/champion/" +
                     champFulls[0]);

@@ -28,13 +28,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 
 
 public class IGN extends AppCompatActivity {
     ProgressDialog pd;
     public enum States {
         findingSummoner, findingPatch, findingPlayers, findingFull,
-        gettingFull
+        findingRank
     }
     States state;
     String patch;
@@ -42,9 +43,14 @@ public class IGN extends AppCompatActivity {
     String[] champFulls = new String[10];
     String[] summNames = new String[10];
     String[] summFulls = new String[10];
+    String[] summIDs = new String[10];
+    String[] ranks = new String[10];
     String summonerNameForUrl;
     JSONArray participantsInfo;
+    String id;
     int champCounter = 0;
+    Intent intent;
+
 
     //Finds JSON data from URL
     //Credit: http://stackoverflow.com/questions/33229869/get-json-data-from-url-using-android
@@ -121,8 +127,6 @@ public class IGN extends AppCompatActivity {
 //                pd.dismiss();
 //            }
             try {
-                Intent intent = new Intent(IGN.this, DisplaySummoners.class);
-                String id;
                 //find the current patch
                 if (state == States.findingPatch) {
                     JSONArray versions = new JSONArray(result);
@@ -136,8 +140,6 @@ public class IGN extends AppCompatActivity {
                     summonerNameForUrl = summonerNameForUrl.replace("%20", "");
                     //get summoner id to perform next JSON task
                     id = response.getJSONObject(summonerNameForUrl).getString("id");
-                    Log.d("TEST", result);
-                    Log.d("ID", id);
                     state = States.findingPlayers;
                     //find summoner current game data
                     new JsonTask().execute("https://na.api.pvp.net/observer-mode/rest/consumer/getSpectatorGameInfo/NA1/" +
@@ -145,11 +147,14 @@ public class IGN extends AppCompatActivity {
                 //finds current game data to get each players data
                 } else if (state == States.findingPlayers) {
                     JSONObject response = new JSONObject(result);
+                    Log.d("FINDINGPLAYERS", response.toString());
                     participantsInfo = response.getJSONArray("participants");
                     for (int i = 0; i < participantsInfo.length(); i++) {
                         JSONObject participantInfo = participantsInfo.getJSONObject(i);
+                        Log.d("PARTICIPANTS INFO", participantInfo.toString());
                         championIDs[i] = participantInfo.getString("championId");
                         summNames[i] = participantInfo.getString("summonerName");
+                        summIDs[i] = participantInfo.getString("summonerId");
                         Log.d("CHAMPION ID", championIDs[i]);
                         Log.d("SUMMONER NAME", summNames[i]);
                     }
@@ -159,6 +164,7 @@ public class IGN extends AppCompatActivity {
                             championIDs[champCounter] + "?champData=image&api_key=RGAPI-4BA2AC26-F249-4BDC-AE5E-7BF6042EB508");
 //                    champCounter++;
                 } else if (state == States.findingFull) {
+                    intent = new Intent(IGN.this, DisplaySummoners.class);
                     JSONObject response= new JSONObject(result);
                     JSONObject image = response.getJSONObject("image");
                     String full  = image.getString("full");
@@ -176,9 +182,25 @@ public class IGN extends AppCompatActivity {
                         champCounter = 0;
                         intent.putExtra("champFulls", champFulls);
                         intent.putExtra("summFulls", summFulls);
-                        pd.dismiss();
-                        startActivity(intent);
+                        state = States.findingRank;
+                        new JsonTask().execute("https://global.api.pvp.net/api/lol/na/v2.5/league/by-summoner/" +
+                                summIDs[0] + "," + summIDs[1] + "," + summIDs[2] + "," + summIDs[3] + "," + summIDs[4] + "," +
+                                summIDs[5] + "," + summIDs[6] + "," + summIDs[7] + "," + summIDs[8] + "," + summIDs[9] + ","
+                                + "/entry?api_key=RGAPI-4BA2AC26-F249-4BDC-AE5E-7BF6042EB508");
                     }
+
+                } else if (state == States.findingRank) {
+
+                    JSONObject response = new JSONObject(result);
+                    Log.d("Finding Rank", response.toString());
+                    Log.d("SummonerIDs", Arrays.toString(summIDs));
+                    for (int i = 0; i < 10; i++) {
+                        //TODO PLACE RANK IN TEXTBOX
+                        ranks[i] = response.getJSONArray(summIDs[0]).getJSONObject(0).getString("tier");
+                    }
+                    pd.dismiss();
+                    startActivity(intent);
+
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
