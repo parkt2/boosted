@@ -177,30 +177,33 @@ public class IGN extends AppCompatActivity {
                         //find images for rest of the champions
                         new JsonTask().execute("https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/" +
                                 championIDs[champCounter] + "?champData=image&api_key=RGAPI-4BA2AC26-F249-4BDC-AE5E-7BF6042EB508");
-//                        champCounter++;
+                        //champCounter++;
                     } else {
                         champCounter = 0;
+                        //store the champions and summoners
                         intent.putExtra("champFulls", champFulls);
                         intent.putExtra("summFulls", summFulls);
+                        //find the summoners' ranks
                         state = States.findingRank;
                         new JsonTask().execute("https://global.api.pvp.net/api/lol/na/v2.5/league/by-summoner/" +
                                 summIDs[0] + "," + summIDs[1] + "," + summIDs[2] + "," + summIDs[3] + "," + summIDs[4] + "," +
                                 summIDs[5] + "," + summIDs[6] + "," + summIDs[7] + "," + summIDs[8] + "," + summIDs[9] + ","
                                 + "/entry?api_key=RGAPI-4BA2AC26-F249-4BDC-AE5E-7BF6042EB508");
                     }
-
                 } else if (state == States.findingRank) {
-
                     JSONObject response = new JSONObject(result);
                     Log.d("Finding Rank", response.toString());
                     Log.d("SummonerIDs", Arrays.toString(summIDs));
+
                     for (int i = 0; i < 10; i++) {
                         //TODO PLACE RANK IN TEXTBOX
-                        ranks[i] = response.getJSONArray(summIDs[0]).getJSONObject(0).getString("tier");
+                        ranks[i] = response.getJSONArray(summIDs[i]).getJSONObject(0).getString("tier") + " "
+                            + response.getJSONArray(summIDs[i]).getJSONObject(0).getJSONArray("entries").getJSONObject(0).getString("division");
+                        Log.d("ranks", ranks[i]);
                     }
+                    intent.putExtra("ranks", ranks);
                     pd.dismiss();
                     startActivity(intent);
-
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -243,6 +246,7 @@ public class IGN extends AppCompatActivity {
         state = States.findingPatch;
         //search box for finding a summoner
         final EditText summonerSearchEdit = (EditText) findViewById(R.id.summonerSearchEdit);
+
         //find current patch
         new JsonTask().execute("https://global.api.pvp.net/api/lol/static-data/na/v1.2/versions?api_key=RGAPI-4BA2AC26-F249-4BDC-AE5E-7BF6042EB508");
         //Action for when summoner name is entered

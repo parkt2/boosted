@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,6 +28,14 @@ public class DisplaySummoners extends AppCompatActivity {
         Intent intent = getIntent();
         String[] champFulls = intent.getStringArrayExtra("champFulls");
         String[] summFulls = intent.getStringArrayExtra("summFulls");
+        String[] ranks = intent.getStringArrayExtra("ranks");
+        Button backButton = (Button) findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DisplaySummoners.this.finish();
+            }
+        });
 //        Log.d("CHAMPFULLS", Arrays.toString(champFulls));
 //        Log.d("SUMMFULLS", Arrays.toString(summFulls));
         new DownloadImageTask((ImageView) findViewById(R.id.summoner1))
@@ -80,7 +89,26 @@ public class DisplaySummoners extends AppCompatActivity {
         sn9.setText(summFulls[8]);
         TextView sn10 = (TextView) findViewById(R.id.summName10);
         sn10.setText(summFulls[9]);
-
+        TextView rank1 = (TextView) findViewById(R.id.summRank1);
+        rank1.setText(ranks[0]);
+        TextView rank2 = (TextView) findViewById(R.id.summRank2);
+        rank2.setText(ranks[1]);
+        TextView rank3 = (TextView) findViewById(R.id.summRank3);
+        rank3.setText(ranks[2]);
+        TextView rank4 = (TextView) findViewById(R.id.summRank4);
+        rank4.setText(ranks[3]);
+        TextView rank5 = (TextView) findViewById(R.id.summRank5);
+        rank5.setText(ranks[4]);
+        TextView rank6 = (TextView) findViewById(R.id.summRank6);
+        rank6.setText(ranks[5]);
+        TextView rank7 = (TextView) findViewById(R.id.summRank7);
+        rank7.setText(ranks[6]);
+        TextView rank8 = (TextView) findViewById(R.id.summRank8);
+        rank8.setText(ranks[7]);
+        TextView rank9 = (TextView) findViewById(R.id.summRank9);
+        rank9.setText(ranks[8]);
+        TextView rank10 = (TextView) findViewById(R.id.summRank10);
+        rank10.setText(ranks[9]);
     }
 // show The Image in a ImageView
 
